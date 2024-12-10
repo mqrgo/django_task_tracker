@@ -16,6 +16,10 @@ jobs:
       - name: Set up Docker
         run: |
           docker build -t django-app .
+
+      - name: Save Docker image to file
+        run: |
+          docker save django-app | gzip > django-app.tar.gz
   
   test:
       runs-on: ubuntu-latest 
@@ -23,6 +27,10 @@ jobs:
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
+
+        - name: Load Docker image from file
+          run: |
+            gunzip -c django-app.tar.gz | docker load
   
         - name: Run tests inside Docker container
           run: |
@@ -34,6 +42,10 @@ jobs:
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
+
+        - name: Load Docker image from file
+          run: |
+            gunzip -c django-app.tar.gz | docker load
   
         - name: Run ruff-check inside Docker container
           run: |
