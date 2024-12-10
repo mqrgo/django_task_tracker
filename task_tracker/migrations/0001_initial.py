@@ -8,7 +8,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -17,26 +16,87 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Task',
+            name="Task",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('dc', models.DateTimeField(auto_now_add=True, verbose_name='дата создания')),
-                ('dm', models.DateTimeField(auto_now=True, verbose_name='дата изменения')),
-                ('title', models.CharField(max_length=255, verbose_name='название')),
-                ('description', models.TextField(blank=True, verbose_name='описание')),
-                ('complete_by_date', models.DateTimeField(blank=True, null=True, verbose_name='выполнить до')),
-                ('file', models.FileField(blank=True, null=True, upload_to=task_tracker.models.get_file_path, verbose_name='файл')),
-                ('importance_status', models.CharField(choices=[('HIGH', 'Высокий'), ('MEDIUM', 'Средний'), ('LOW', 'Низкий')], default='MEDIUM', max_length=255, verbose_name='статус')),
-                ('status', models.CharField(choices=[('IN_PROGRESS', 'В процессе'), ('COMPLETED', 'Выполнена'), ('PENDING', 'Ожидание')], default='PENDING', max_length=255, verbose_name='статус выполнения')),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tasks', to=settings.AUTH_USER_MODEL, verbose_name='автор')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "dc",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="дата создания"
+                    ),
+                ),
+                (
+                    "dm",
+                    models.DateTimeField(auto_now=True, verbose_name="дата изменения"),
+                ),
+                ("title", models.CharField(max_length=255, verbose_name="название")),
+                ("description", models.TextField(blank=True, verbose_name="описание")),
+                (
+                    "complete_by_date",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="выполнить до"
+                    ),
+                ),
+                (
+                    "file",
+                    models.FileField(
+                        blank=True,
+                        null=True,
+                        upload_to=task_tracker.models.get_file_path,
+                        verbose_name="файл",
+                    ),
+                ),
+                (
+                    "importance_status",
+                    models.CharField(
+                        choices=[
+                            ("HIGH", "Высокий"),
+                            ("MEDIUM", "Средний"),
+                            ("LOW", "Низкий"),
+                        ],
+                        default="MEDIUM",
+                        max_length=255,
+                        verbose_name="статус",
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("IN_PROGRESS", "В процессе"),
+                            ("COMPLETED", "Выполнена"),
+                            ("PENDING", "Ожидание"),
+                        ],
+                        default="PENDING",
+                        max_length=255,
+                        verbose_name="статус выполнения",
+                    ),
+                ),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="tasks",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="автор",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'задача',
-                'verbose_name_plural': 'задачи',
-                'ordering': ['-dc'],
+                "verbose_name": "задача",
+                "verbose_name_plural": "задачи",
+                "ordering": ["-dc"],
             },
             managers=[
-                ('completed', django.db.models.manager.Manager()),
+                ("completed", django.db.models.manager.Manager()),
             ],
         ),
     ]

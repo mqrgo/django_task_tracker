@@ -4,42 +4,42 @@ from rest_framework.exceptions import ValidationError
 from task_tracker import consts, managers
 
 
-def get_file_path(instance, filename):
-    return f"{instance.author.username}/tasks/{instance.id}/{filename}"
+def get_file_path(instance: models.Model, filename: str) -> str:
+    return f'{instance.author.username}/tasks/{instance.id}/{filename}'
 
 
 class BaseModel(models.Model):
-    dc = models.DateTimeField("дата создания", auto_now_add=True)
-    dm = models.DateTimeField("дата изменения", auto_now=True)
+    dc = models.DateTimeField('дата создания', auto_now_add=True)
+    dm = models.DateTimeField('дата изменения', auto_now=True)
 
     class Meta:
         abstract = True
 
 
 class Task(BaseModel):
-    title = models.CharField("название", max_length=255)
+    title = models.CharField('название', max_length=255)
     author = models.ForeignKey(
-        "auth.User",
-        verbose_name="автор",
-        related_name="tasks",
+        'auth.User',
+        verbose_name='автор',
+        related_name='tasks',
         on_delete=models.CASCADE,
     )
-    description = models.TextField("описание", blank=True)
-    complete_by_date = models.DateTimeField("выполнить до", blank=True, null=True)
+    description = models.TextField('описание', blank=True)
+    complete_by_date = models.DateTimeField('выполнить до', blank=True, null=True)
     file = models.FileField(
-        "файл",
+        'файл',
         upload_to=get_file_path,
         blank=True,
         null=True,
     )
     importance_status = models.CharField(
-        "статус",
+        'статус',
         max_length=255,
         choices=consts.TaskImportanceStatus.CHOICES,
         default=consts.TaskImportanceStatus.MEDIUM,
     )
     status = models.CharField(
-        "статус выполнения",
+        'статус выполнения',
         max_length=255,
         choices=consts.TaskStatus.CHOICES,
         default=consts.TaskStatus.PENDING,
@@ -51,17 +51,17 @@ class Task(BaseModel):
     uncompleted = managers.CompletedTaskManager()
 
     class Meta:
-        verbose_name = "задача"
-        verbose_name_plural = "задачи"
-        ordering = ["-dc"]
+        verbose_name = 'задача'
+        verbose_name_plural = 'задачи'
+        ordering = ['-dc']
 
-    def __str__(self):
+    def __str__(self) -> str:  # NOQA ANN201
         return self.title
 
-    def clean(self):
+    def clean(self):  # NOQA ANN201
         if self.complete_by_date and self.dc <= self.complete_by_date:
-            raise ValidationError("Конечная дата не может быть до даты создания задачи")
+            raise ValidationError('Конечная дата не может быть до даты создания задачи')
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):  # NOQA ANN201
         self.clean()
         super().save(*args, **kwargs)
