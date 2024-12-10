@@ -1,1 +1,1 @@
-# django_task_tracker
+# task_tracker
