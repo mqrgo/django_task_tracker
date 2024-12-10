@@ -23,5 +23,5 @@ jobs:
   
       - name: Run ruff-check inside Docker container
         run: |
-          docker run --rm django-app ruff .
+          docker run --rm django-app ruff check
 
